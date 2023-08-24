@@ -1,4 +1,4 @@
-readme for the full-Stokes model version 2.0.0
+readme for the FEniCS-full-Stokes version 1.1.0
 
 We describe the code in the readme file:
 
