@@ -1,5 +1,3 @@
-readme for the FEniCS-full-Stokes version 1.1.0
-
 We describe the code in the readme file:
 
 The simulation program consists of the following folders:
@@ -32,6 +30,7 @@ There is also the derived class BumpyBed, which generates the domain for the exp
 BumpyBed3D is derived from BumpyBed and generates the domain for the experiment ISMP-HOM A.
 Both domains generate copies to the left and the right of the glacier.
 Both __init__ methods have the option that the original glacier has a finer resolution, and the copies have a coarser resolution. That option works only for resolution_x_direction=98. It is helpful to calculate the solution of the 3D simulation in less computation time.
+In version 1.2.0 we added the derived class a sliding RectangleSliding, which generates a rectangle domain that is used for sliding.
 
 ## solver
 The solver saves the partial differential equation as an attribute.
@@ -52,3 +51,4 @@ Using the residual norm as a minimization term for the exact step size is imposs
 ## examples
 In the examples folder is the file run_fullStokes.py. If FEniCS and a compatible Python3 version are installed, that file should be executable with
 python3 run_fullStokes.py
+We also added some more examples. The results of these runs are in the corresponding folders.

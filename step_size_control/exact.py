@@ -35,5 +35,7 @@ class Exact(StepSizeControl):
         # We use a minimal step size
         if(t<self.min_step):
             t = self.min_step
+        print('step size is',t)
         solver.equation.U.assign(solver.equation.U + t * U)
+        solver.step_sizes.append(t)
         return solver.equation.U

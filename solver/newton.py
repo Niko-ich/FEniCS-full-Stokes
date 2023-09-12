@@ -26,14 +26,18 @@ class Newton(NonlinearIterative):
 
             # We update the field self.equation.U with the new value
             # We pass information like the equation and the minimization term
+            start_step_size_calc = time.time()
             self.step_size_control.calc_step_size(U_Newton,self)
+            end_step_size_calc = time.time()
+            self.compuation_time_step_size.append(end_step_size_calc-start_step_size_calc)
             # We perform diagnostic calculations.
             # Please modify this method in nonlinear_iterative.py corresponding to your needs
             end = time.time()
+            self.computation_time_iteration.append(end-start)
             # We do not consider the time for calculating diagnostics.
             print('time one iteration',end-start)
             self.diagnostic_stop()
 
 
-        self.equation.save_data(self.output_file,self.norm_list,self.rel_error,self.rel_local_error)
+        self.equation.save_data(self.output_file,self.norm_list,self.rel_error,self.rel_local_error,self.step_sizes,self.computation_time_iteration,self.compuation_time_step_size)
         return self.equation.U

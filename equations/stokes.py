@@ -5,7 +5,7 @@ import numpy as np
 from equations.pde import PDE
 
 class Stokes(PDE):
-    def __init__(self, geometry, fem, nue, f,L=None):
+    def __init__(self, geometry, fem, nue, f,L=None,friction_domain=None,friction_coefficient=0):
         super().__init__(geometry,fem)
         (u, p) = TrialFunctions(self.W)
         (v, q) = TestFunctions(self.W)
@@ -13,6 +13,11 @@ class Stokes(PDE):
         self.nue = nue
         self.a = self.nue*inner(grad(u), grad(v))*dx \
                  + div(v)*p*dx + q*div(u)*dx
+        
+        # Additional friction term
+        if(friction_domain!=None):
+            self.a = self.a + friction_coefficient*inner(u,v)*friction_domain
+
         # PSPG stabilization if necessary and defined in fem space:
         if hasattr(self.fem, 'stab'):
             self.a += self.stab_PSPG()*inner(grad(p), grad(q))*dx

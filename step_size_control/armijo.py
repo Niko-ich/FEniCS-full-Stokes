@@ -38,5 +38,6 @@ class Armijo(StepSizeControl):
         setattr(solver,self.min_term+str('_old'),min_term_new)
 
         print('alpha from '+str(self.min_term), alpha)
+        solver.step_sizes.append(alpha)
         print('min_term relative difference', "{:.8E}".format((min_term_old - min_term_new) / min_term_old))
         return solver.equation.U

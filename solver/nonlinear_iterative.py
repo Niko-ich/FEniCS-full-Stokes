@@ -18,6 +18,13 @@ class NonlinearIterative(Solver):
         self.rel_error = []
         # We create a list for local relative errors compared to a reference solution
         self.rel_local_error = []
+        # We create a list for the step sizes
+        self.step_sizes = []
+
+        # We create two attributes to measure computation time of each iteration
+        # and computation time of the step sizes
+        self.computation_time_iteration = []
+        self.compuation_time_step_size = []
 
         # Reference solution
         self.reference_solution = ref_solution
