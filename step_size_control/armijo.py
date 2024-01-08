@@ -4,10 +4,11 @@ from step_size_control.step_size_control import *
 
 class Armijo(StepSizeControl):
 
-    def __init__(self,min_term='norm',min_step=10**(-6),gamma=10**(-8)):
+    def __init__(self,min_term='norm',min_step=10**(-6),threshold = 0.0,gamma=10**(-8)):
 
         super().__init__(min_term,min_step)
         self.gamma = gamma
+        self.threshold = threshold
 
     def calc_step_size(self,U,solver):
         # This calculates the classical armijo step size.
@@ -33,6 +34,10 @@ class Armijo(StepSizeControl):
             alpha = 0.5 * alpha
             solver.equation.U.assign(solver.equation.U + alpha * U)
             min_term_new = minimization_term()
+            #if(alpha < self.threshold):
+            #    solver.equation.U.assign(solver.equation.U + (alpha-1.0) * U)
+            #    alpha = 1.0
+            #    break
 
         # We set the new value for the old minimization term
         setattr(solver,self.min_term+str('_old'),min_term_new)

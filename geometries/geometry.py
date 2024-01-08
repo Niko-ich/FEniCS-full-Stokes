@@ -42,7 +42,7 @@ class Geometry():
 			plt.show()
 
 		if (self.dimension == 2):
-			print(self.mesh.coordinates())
+			#print(self.mesh.coordinates())
 			coor_list = self.mesh.coordinates()
 			plot(self.mesh)
 			plt.show()

@@ -49,6 +49,7 @@ class Stokes(PDE):
         pressures = np.zeros((np.shape(coordinates)[0], 1))
         u, p = U.split()
 
+
         for i in range(0,np.shape(coordinates)[0]):
             pressures[i,0] = p(coordinates[i][:])
             for j in range(0,self.geometry.dimension):
@@ -62,7 +63,9 @@ class Stokes(PDE):
         velocities = np.zeros((np.shape(coordinates)[0], self.geometry.dimension))
         pressures = np.zeros((np.shape(coordinates)[0], 1))
         u, p = self.U.split()
-
+        # ... Is this a problem???
+        u.set_allow_extrapolation(True)
+        p.set_allow_extrapolation(True)
         for i in range(0,np.shape(coordinates)[0]):
             pressures[i,0] = p(coordinates[i][:])
             for j in range(0,self.geometry.dimension):

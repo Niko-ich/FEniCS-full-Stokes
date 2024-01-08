@@ -2,11 +2,13 @@ import sys
 from step_size_control.step_size_control import *
 class Exact(StepSizeControl):
 
-    def __init__(self,min_term='norm',min_step=0.0,right=4.0,left=0.0,max_bisection_iterations=25):
+    def __init__(self,min_term='norm',min_step=0.0,right=4.0,left=0.0,threshold = 0.0,max_bisection_iterations=25):
 
         super().__init__(min_term,min_step)
         self.right = right
         self.left = left
+        # If the step size is below this threshold, we choose the step size 1 as we are near the solution.
+        self.threshold = threshold
 
         self.max_bisection_iterations = max_bisection_iterations
 
@@ -35,6 +37,8 @@ class Exact(StepSizeControl):
         # We use a minimal step size
         if(t<self.min_step):
             t = self.min_step
+        if(t<self.threshold):
+            t = 1.0
         print('step size is',t)
         solver.equation.U.assign(solver.equation.U + t * U)
         solver.step_sizes.append(t)

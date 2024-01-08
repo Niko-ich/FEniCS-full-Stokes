@@ -12,7 +12,9 @@ class Picard(NonlinearIterative):
 		# This is the solver for the Picard iteration
 		# Calculates diagnostic variables like norm etc.
 		self.calculate_diagnostic_variables()
-
+        # We calculate the residual norm to check if ||G(u_0)||/||G(u_k)|| is small enough.
+        # Then we stop.
+		#old_residual = self.equation.norm()
 
 		for iter in range(self.max_iter):
 			print('iter', iter)
@@ -20,6 +22,7 @@ class Picard(NonlinearIterative):
 			# Now we calculate the solution for the Picard iteration
 			a = self.equation.a_picard()
 			U_Picard = Function(self.equation.W)
+
 			solve(a == self.equation.L, U_Picard, self.equation.bc, solver_parameters={"linear_solver": self.inner_solver})
 
 			# We save the old velocity field to check if a stopping criteria is fulfilled.
@@ -46,6 +49,14 @@ class Picard(NonlinearIterative):
 			# We do not consider the time for calculating diagnostics.
 			print('time one iteration', end - start)
 			self.diagnostic_stop()
+			u_old, p_old = U_old.split()
+			u,p = self.equation.U.split()
+			rel_error = 2.0*assemble(inner(u_old-u,u_old-u)*dx)/(assemble(inner(u_old,u_old)*dx)+assemble(inner(u,u)*dx))
+			print('rel_error_squared',rel_error)
+			#new_residual = self.equation.norm()
+			#if(new_residual/old_residual < self.epsi**2):
+			#	break
+
 
 		self.equation.save_data(self.output_file, self.norm_list, self.rel_error,self.rel_local_error,self.step_sizes,self.computation_time_iteration,self.compuation_time_step_size)
 		return self.equation.U

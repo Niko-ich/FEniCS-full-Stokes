@@ -12,4 +12,5 @@ class ConstantStep(StepSizeControl):
         # solver: information about the solver
         print('step size',self.step_size)
         solver.equation.U.assign(solver.equation.U - self.step_size * U)
+        solver.step_sizes.append(self.step_size)
         return solver.equation.U
