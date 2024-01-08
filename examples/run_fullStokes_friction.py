@@ -20,13 +20,19 @@ import time
 # Creating channel
 #domain = ChannelCylinder()
 dim=2
-
+#Domain = BumpyBed(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
 Domain = RectangleSliding(resolution_x_direction=150,resolution_z_direction=30)
-
+#Domain = BumpyBed(k=3,resolution_x_direction=70,resolution_z_direction=10,local_refine=False)
+#Domain = BumpyBed3D(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
+#Domain = BumpyBed3D(k=3,resolution_x_direction=36,resolution_z_direction=10,local_refine=False)
+#Domain.create_domain(local_refine=True)
 
 
 print('num cells',Domain.mesh.num_cells())
-
+#print('backends',list_linear_algebra_backends())
+#print('used',linear_algebra_backends())
+#print('list solvers',list_linear_solver_methods())
+#print('list preconditioners',list_krylov_solver_preconditioners())
 
 # We visualize our domain
 #RectangleSliding.visualize(Domain)
@@ -51,11 +57,11 @@ mu0= 10**(-17)	# term for getting solution in H^1.
 B = 0.5*(1.0e-16)**(-1.0/3.0) # B term. Factor infront of nonlinear term.
 realistic_factor = 10**6 # factor that together with B has a typical size of Dv
 
-friction_coefficients = [1e3,1e7]
-
+friction_coefficients = [1e3]
+#friction_coefficients = [1e7]
 
 for friction_coefficient in friction_coefficients:
-
+	'''
 	print('reference calculation')
 	# reference solution
 	equation = FullStokes(Domain,Elements,B,n,delta,mu0,f,friction_domain=Domain.ds(0),friction_coefficient=friction_coefficient)
@@ -79,7 +85,7 @@ for friction_coefficient in friction_coefficients:
 	line_search = Armijo(min_term='functional',gamma=10**(-15))
 	solver = Newton(equation,line_search,max_iter=32,calc_norm=True,output_file='friction_corrected2_residual/150x30Newton_with_Armijo_friction_coeff_high_res'+str(friction_coefficient))#,ref_solution=solution_picard_ref)
 	solution_Newton_armijo = solver.solve()
-
+	'''
 	print('Newton with armijo min_step')
 	# Newton with armijo min_step
 	equation = FullStokes(Domain,Elements,B,n,delta,mu0,f,friction_domain=Domain.ds(0),friction_coefficient=friction_coefficient)
@@ -109,7 +115,7 @@ for friction_coefficient in friction_coefficients:
 
 	solution_Newton_exact = solver.solve()
 
-
+	'''
 	print('Picard constant')
 	# Picard
 	equation = FullStokes(Domain,Elements,B,n,delta,mu0,f,friction_domain=Domain.ds(0),friction_coefficient=friction_coefficient)
@@ -121,7 +127,7 @@ for friction_coefficient in friction_coefficients:
 	line_search = ConstantStep()
 	solver = Picard(equation,line_search,max_iter=25,calc_norm=True,output_file='friction_small_slope/Picard_constant_friction_coeff_high_res'+str(friction_coefficient),ref_solution=solution_picard_ref)
 	solution_picard_constant = solver.solve()
-
+	'''
 
 	print('Picard exact step size')
 	# Picard exact step size

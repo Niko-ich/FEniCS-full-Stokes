@@ -15,7 +15,7 @@ import numpy as np
 import time
 
 
-
+#print('precision',np.finfo(float).eps)
 
 # Creating channel
 #domain = ChannelCylinder()
@@ -23,7 +23,12 @@ dim=2
 Domain = BumpyBed(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
 
 
+
 print('num cells',Domain.mesh.num_cells())
+#print('backends',list_linear_algebra_backends())
+#print('used',linear_algebra_backends())
+#print('list solvers',list_linear_solver_methods())
+#print('list preconditioners',list_krylov_solver_preconditioners())
 
 # We visualize our domain
 BumpyBed3D.visualize(Domain)
@@ -48,7 +53,7 @@ if(dim==3):
 #u_field >> u;
 n= 3 # Exponent for nonlinear term with p=1+1/n
 delta = 10**(-12) # term for differentiation.
-mu0= 10**(-17)	# term for getting solution in H^1.
+mu0 = 0.0 # term formaly needed for getting solution in H^1. However, we set it to zero.
 B = 0.5*(1.0e-16)**(-1.0/3.0) # B term. Factor infront of nonlinear term.
 realistic_factor = 10**6 # factor that together with B has a typical size of Dv
 
@@ -62,7 +67,7 @@ initial_solve = LinearDirect(initial_stokes)
 initial_solve.solve()
 equation.U = initial_stokes.U
 line_search = ConstantStep()
-solver = Picard(equation,line_search,max_iter=80,calc_norm=False,output_file='2d_run_final_corrected_relvel/reference_calculation')
+solver = Picard(equation,line_search,max_iter=80,calc_norm=False,output_file='2d_run_final_corrected_without_mu0/reference_calculation_without_mu0')
 solution_picard_ref = solver.solve()
 
 
@@ -76,7 +81,7 @@ initial_solve = LinearDirect(initial_stokes)
 initial_solve.solve()
 equation.U = initial_stokes.U
 line_search = Armijo(min_term='functional',gamma=10**(-10))
-solver = Newton(equation,line_search,max_iter=40,calc_norm=True,output_file='2d_run_final_corrected_relvel/Newton_with_Armijo',ref_solution=solution_picard_ref)
+solver = Newton(equation,line_search,max_iter=50,calc_norm=True,output_file='2d_run_final_corrected_without_mu0/Newton_with_Armijo_without_mu0',ref_solution=solution_picard_ref)
 solution_Newton_armijo = solver.solve()
 
 
@@ -89,8 +94,8 @@ initial_solve = LinearDirect(initial_stokes)
 initial_solve.solve()
 equation.U = initial_stokes.U
 line_search = Armijo(min_term='functional',gamma=10**(-10),min_step=0.5)
-solver = Newton(equation,line_search,max_iter=40,calc_norm=True,
-				output_file='2d_run_final_corrected_relvel/Newton_with_Armijo_min_step',ref_solution=solution_picard_ref)
+solver = Newton(equation,line_search,max_iter=50,calc_norm=True,
+				output_file='2d_run_final_corrected_without_mu0/Newton_with_Armijo_min_step_without_mu0',ref_solution=solution_picard_ref)
 solution_Newton_armijo_min_step = solver.solve()
 
 print('Newton with exact')
@@ -102,8 +107,8 @@ initial_solve = LinearDirect(initial_stokes)
 initial_solve.solve()
 equation.U = initial_stokes.U
 line_search = Exact(min_term='functional',right=4.0,left=0.0)
-solver = Newton(equation,line_search,max_iter=40,calc_norm=True,
-				output_file='2d_run_final_corrected_relvel/Newton_with_exact',ref_solution=solution_picard_ref)
+solver = Newton(equation,line_search,max_iter=50,calc_norm=True,
+				output_file='2d_run_final_corrected_without_mu0/Newton_with_exact_without_mu0',ref_solution=solution_picard_ref)
 
 solution_Newton_exact = solver.solve()
 
@@ -117,7 +122,7 @@ initial_solve = LinearDirect(initial_stokes)
 initial_solve.solve()
 equation.U = initial_stokes.U
 line_search = ConstantStep()
-solver = Picard(equation,line_search,max_iter=40,calc_norm=True,output_file='2d_run_final_corrected_relvel/Picard_constant',ref_solution=solution_picard_ref)
+solver = Picard(equation,line_search,max_iter=50,calc_norm=True,output_file='2d_run_final_corrected_without_mu0/Picard_constant_without_mu0',ref_solution=solution_picard_ref)
 solution_picard = solver.solve()
 
 print('Picard exact step size')
@@ -129,9 +134,10 @@ initial_solve = LinearDirect(initial_stokes)
 initial_solve.solve()
 equation.U = initial_stokes.U
 line_search =Exact(min_term='functional',right=4.0,left=0.0)
-solver = Picard(equation,line_search,max_iter=40,calc_norm=True,
-output_file='2d_run_final_corrected_relvel/Picard_exact',ref_solution=solution_picard_ref)
+solver = Picard(equation,line_search,max_iter=50,calc_norm=True,
+output_file='2d_run_final_corrected_without_mu0/Picard_exact_without_mu0',ref_solution=solution_picard_ref)
 solution_picard_exact = solver.solve()
+'''
 
 print('Picard armijo step size')
 # Picard exact step size
@@ -142,10 +148,10 @@ initial_solve = LinearDirect(initial_stokes)
 initial_solve.solve()
 equation.U = initial_stokes.U
 line_search =Armijo(min_term='functional',gamma=10**(-10))
-solver = Picard(equation,line_search,max_iter=40,calc_norm=True,
-output_file='2d_run_final_corrected_relvel/Picard_armijo',ref_solution=solution_picard_ref)
+solver = Picard(equation,line_search,max_iter=50,calc_norm=True,
+output_file='2d_run_final_corrected_without_mu0/Picard_armijo_without_mu0',ref_solution=solution_picard_ref)
 solution_picard_armijo = solver.solve()
 
 end = time.time()
 print('elapsed time',end-start)
-
+'''

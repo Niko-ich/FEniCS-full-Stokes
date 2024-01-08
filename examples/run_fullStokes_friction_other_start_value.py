@@ -15,15 +15,24 @@ import numpy as np
 import time
 
 
+#print('precision',np.finfo(float).eps)
+
 # Creating channel
 #domain = ChannelCylinder()
 dim=2
-
+#Domain = BumpyBed(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
 Domain = RectangleSliding(resolution_x_direction=150,resolution_z_direction=30)
+#Domain = BumpyBed(k=3,resolution_x_direction=70,resolution_z_direction=10,local_refine=False)
+#Domain = BumpyBed3D(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
+#Domain = BumpyBed3D(k=3,resolution_x_direction=36,resolution_z_direction=10,local_refine=False)
+#Domain.create_domain(local_refine=True)
 
 
 print('num cells',Domain.mesh.num_cells())
-
+#print('backends',list_linear_algebra_backends())
+#print('used',linear_algebra_backends())
+#print('list solvers',list_linear_solver_methods())
+#print('list preconditioners',list_krylov_solver_preconditioners())
 
 # We visualize our domain
 #RectangleSliding.visualize(Domain)

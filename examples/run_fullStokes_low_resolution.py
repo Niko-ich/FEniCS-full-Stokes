@@ -20,10 +20,19 @@ import time
 # Creating channel
 #domain = ChannelCylinder()
 dim=2
-
+#Domain = BumpyBed(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
 Domain = BumpyBed(k=3,resolution_x_direction=350,resolution_z_direction=10,local_refine=False)
+#Domain = BumpyBed(k=3,resolution_x_direction=70,resolution_z_direction=10,local_refine=False)
+#Domain = BumpyBed3D(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
+#Domain = BumpyBed3D(k=3,resolution_x_direction=36,resolution_z_direction=10,local_refine=False)
+#Domain.create_domain(local_refine=True)
+
 
 print('num cells',Domain.mesh.num_cells())
+#print('backends',list_linear_algebra_backends())
+#print('used',linear_algebra_backends())
+#print('list solvers',list_linear_solver_methods())
+#print('list preconditioners',list_krylov_solver_preconditioners())
 
 # We visualize our domain
 BumpyBed3D.visualize(Domain)
@@ -42,6 +51,18 @@ if(dim==3):
 	f = g*rho*Constant((np.sin(alpha),0,-np.cos(alpha)))
 
 
+
+# Newton with armijo step sizes
+'''
+Equation = FullStokes(Domain,Elements,0.5*(1.0e-16)**(-1.0/3.0),3,10**(-12),10**(-17),f)
+Initial_Stokes = Stokes(Domain,Elements,0.5*(1.0e-16)**(-1.0/3.0)*10**6,f)
+Initial_Solve = LinearDirect(Initial_Stokes)
+Initial_Solve.solve()
+Equation.U = Initial_Stokes.U
+Stepping = StepSizeControl(gamma=10**(-10))
+solver = Picard(Equation,Stepping,max_iter=40,calc_norm=True,step_method='constant',min_term='functional',output_file='test')
+solution_Picard = solver.solve()
+'''
 
 #File mesh_file("u.pvd");
 #u_field >> u;

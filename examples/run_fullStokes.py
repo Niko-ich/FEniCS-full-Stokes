@@ -17,7 +17,8 @@ import numpy as np
 
 # We chose the dimension of the domain. Either dim=2 or dim=3.
 dim = 2
-Domain = BumpyBed(k=3,resolution_x_direction=140,resolution_z_direction=10,local_refine=False)
+#Domain = BumpyBed(k=3,resolution_x_direction=140,resolution_z_direction=10,local_refine=False)
+Domain = BumpyBed(k=3,resolution_x_direction=98,resolution_z_direction=10,local_refine=True)
 # in 3d
 #dim = 3
 #Domain = BumpyBed3D(k=3,resolution_x_direction=6,resolution_z_direction=3,local_refine=False)
@@ -25,7 +26,7 @@ Domain = BumpyBed(k=3,resolution_x_direction=140,resolution_z_direction=10,local
 # at the copies of the glaciers. It only works for resolution_x_direction=98.
 
 # We visualize our domain
-BumpyBed.visualize(Domain)
+#BumpyBed.visualize(Domain)
 #BumpyBed3D.visualize(Domain)
 # We chose the elements
 Elements = TaylorHood(Domain)
@@ -56,7 +57,7 @@ initial_solve.solve()
 # We save the solution of the stokes problem to our equation.
 equation.U = initial_stokes.U
 # We chose the line search
-line_search = Armijo(min_term='functional',gamma=10**(-10))
+line_search = Armijo(min_term='functional',gamma=10**(-10),min_step=0.5)
 # min_term = 'norm' is also possible. 
 # That calculates the residual norm by solving a Stokes problem. 
 # Alternatives are
@@ -65,7 +66,7 @@ line_search = Armijo(min_term='functional',gamma=10**(-10))
 # We choose the solver
 #solver = Picard(equation,line_search,max_iter=3,calc_norm=True, output_file='test')
 # Alternatively, we can choose Newton's method for the solver
-solver = Newton(equation,line_search,max_iter=3,calc_norm=True, output_file='test')
+solver = Newton(equation,line_search,max_iter=20,calc_norm=True, output_file='test')
 # Picard and Newton have the optional argument ref_solution.
 # That can be used to calculate the relative error and a local relative error.
 # Finaly, we call the solver
