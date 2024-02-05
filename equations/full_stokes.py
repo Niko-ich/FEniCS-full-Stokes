@@ -273,9 +273,9 @@ class FullStokes(Stokes):
                         length_dx = self.geometry.top_grid[right_index][0]-self.geometry.top_grid[index][0]
                         if(cfl_constant_check< abs(ux*deltaT/length_dx)):
                             cfl_constant_check = abs(ux*deltaT/length_dx)
-                        left_hand_side_matrix[index,index] =  1.0 - Theta * ux * deltaT/length_dx
-                        left_hand_side_matrix[index,right_index] = Theta * ux*deltaT/length_dx
-                        right_hand_side[index,0] = z + (1-Theta) * ux*deltaT/length_dx*(self.geometry.top_grid[right_index][1]-self.geometry.top_grid[index][1]) + deltaT * uz
+                        left_hand_side_matrix[index,index] =  1.0 + Theta * ux * deltaT/length_dx
+                        left_hand_side_matrix[index,right_index] = - Theta * ux*deltaT/length_dx
+                        right_hand_side[index,0] = z - (1-Theta) * ux*deltaT/length_dx*(self.geometry.top_grid[right_index][1]-self.geometry.top_grid[index][1]) + deltaT * uz
 
   
         print('cfl constant',cfl_constant_check)
